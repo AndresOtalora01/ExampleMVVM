@@ -1,10 +1,11 @@
-package andres.otalora.examplemvvm.view
+package andres.otalora.examplemvvm.ui.view
 
 import andres.otalora.examplemvvm.databinding.ActivityMainBinding
-import andres.otalora.examplemvvm.viewmodel.QuoteViewModel
+import andres.otalora.examplemvvm.ui.viewmodel.QuoteViewModel
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 
 class MainActivity : AppCompatActivity() {
@@ -18,9 +19,15 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        quoteViewModel.onCreate()
+
         quoteViewModel.quoteModel.observe(this, { currentQuote ->
             binding.tvQuote.text = currentQuote.quote
             binding.tvAuthor.text = currentQuote.author
+        })
+
+        quoteViewModel.isLoading.observe(this, Observer {
+            binding.progress.isVisible = it
         })
 
         binding.viewContainer.setOnClickListener {
